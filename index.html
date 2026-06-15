@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>가짜배달 (Fake Delivery) - 배달 참기 챌린지</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 공통 헤더 -->
+        <header class="app-header">
+            <h1 class="logo">🍕 가짜배달</h1>
+            <p class="tagline">배달 음식을 줄이고 지갑과 건강을 지키세요!</p>
+        </header>
+
+        <!-- 화면 1: 홈 -->
+        <section id="view-home" class="view">
+            <div class="banner">
+                <h2>오늘도 배달 참기 챌린지 🚫🍗</h2>
+                <p>먹고 싶은 음식을 선택해보세요. 실제 주문과 결제는 발생하지 않는 가짜 배달 서비스입니다.</p>
+            </div>
+
+            <!-- 통계 대시보드 -->
+            <div class="dashboard">
+                <div class="stat-card">
+                    <span class="stat-label">지금까지 절약 금액</span>
+                    <span class="stat-value" id="total-saved-money">0원</span>
+                </div>
+                <div class="stat-grid">
+                    <div class="stat-card mini">
+                        <span class="stat-label">가짜 주문 횟수</span>
+                        <span class="stat-value-sm" id="fake-order-count">0회</span>
+                    </div>
+                    <div class="stat-card mini">
+                        <span class="stat-label">실제 주문 방지율</span>
+                        <span class="stat-value-sm" id="prevention-rate">0%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 음식 목록 -->
+            <h3 class="section-title">오늘 당기는 야식/음식은?</h3>
+            <div class="food-list" id="food-list-container">
+                <!-- JS에서 동적으로 생성됩니다 -->
+            </div>
+
+            <!-- 하단 정보성 푸터 -->
+            <footer class="view-footer">
+                <p>💡 가짜 주문을 완료하면 실제처럼 배달 단계가 진행됩니다.</p>
+            </footer>
+        </section>
+
+        <!-- 화면 2: 주문 확인 -->
+        <section id="view-confirm" class="view hidden">
+            <div class="card confirm-card">
+                <div class="confirm-emoji" id="confirm-emoji">🍕</div>
+                <h2 class="confirm-title" id="confirm-name">피자</h2>
+                <p class="confirm-price" id="confirm-price">25,000원</p>
+                
+                <div class="divider"></div>
+                
+                <p class="confirm-message">위 음식으로 가짜 주문을 시작하시겠습니까?</p>
+                <p class="confirm-submessage">실제 결제는 발생하지 않으며 배달 시뮬레이션이 시작됩니다.</p>
+                
+                <div class="button-group">
+                    <button id="btn-order-confirm" class="btn btn-primary">주문하기</button>
+                    <button id="btn-order-cancel" class="btn btn-secondary-outline">취소</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 화면 3: 가짜 배달 진행 -->
+        <section id="view-progress" class="view hidden">
+            <div class="card progress-card">
+                <div class="delivery-status-header">
+                    <span class="badge">실시간 배달 현황</span>
+                    <h2 class="status-title" id="status-title">주문 접수</h2>
+                </div>
+
+                <!-- 진행 바 -->
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="progress-bar-fill"></div>
+                </div>
+                <div class="progress-percentage" id="progress-percentage">0%</div>
+
+                <!-- 단계 노드 표시 -->
+                <div class="status-steps">
+                    <div class="step active" data-step="0">접수</div>
+                    <div class="step" data-step="1">조리중</div>
+                    <div class="step" data-step="2">조리완료</div>
+                    <div class="step" data-step="3">출발</div>
+                    <div class="step" data-step="4">곧도착</div>
+                    <div class="step" data-step="5">완료</div>
+                </div>
+
+                <div class="funny-box">
+                    <p class="funny-emoji">💬</p>
+                    <p class="funny-text" id="funny-text">사장님이 열심히 요리하는 척하고 있습니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 화면 4: 완료 -->
+        <section id="view-completed" class="view hidden">
+            <div class="card completed-card">
+                <div class="success-icon">🎉</div>
+                <h2>배달이 완료되었습니다!</h2>
+                <p class="sub-message">실제로는 돈을 전혀 쓰지 않았습니다. 축하합니다! 👏</p>
+                
+                <div class="savings-highlight">
+                    <span class="savings-label">오늘 절약한 금액</span>
+                    <span class="savings-value" id="today-saved-money">0원</span>
+                </div>
+
+                <!-- 핵심 검증 질문 영역 -->
+                <div class="feedback-box" id="feedback-box">
+                    <p class="feedback-question">🤔 지금 실제 배달을 시킬 생각이 드시나요?</p>
+                    <div class="button-group">
+                        <button id="btn-feedback-yes" class="btn btn-danger-outline">예 (실패 😢)</button>
+                        <button id="btn-feedback-no" class="btn btn-success">아니오 (성공! 🎉)</button>
+                    </div>
+                </div>
+
+                <div class="post-feedback-box hidden" id="post-feedback-box">
+                    <p class="feedback-thanks">의견을 등록해주셔서 감사합니다! 절약 통계에 반영되었습니다.</p>
+                </div>
+
+                <button id="btn-restart" class="btn btn-primary btn-block">다시 하기</button>
+            </div>
+        </section>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
